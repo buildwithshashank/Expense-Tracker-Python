@@ -1,3 +1,5 @@
+import json
+
 class ExpenseTracker:
     def __init__(self):
         self.expenses = []
@@ -22,7 +24,25 @@ class ExpenseTracker:
     def delete_expense(self, index):
         self.expenses.pop(index)
 
+    def save_to_file(self):
+        file = open("expenses.txt", "w")
+        file.write(json.dumps(self.expenses))
+        file.close()
+
+    def load_from_file(self):
+        try:
+            file = open("expenses.txt", "r")
+            data = file.read()
+            self.expenses = json.loads(data)
+            file.close()
+        except:
+            self.expenses = [0]
+        
+
+
+
 tracker = ExpenseTracker()
+tracker.load_from_file()
 
 while True:
     print("1. Add Expense")
@@ -37,6 +57,7 @@ while True:
         description = input("The Purpose of expenditure: ")
         tracker.add_expense(amount, description)
         print("Expense added!")
+        tracker.save_to_file()
 
     elif choice == "2":
         tracker.view_expenses()
@@ -49,11 +70,18 @@ while True:
         index = int(input("Enter Index of the Expense(): "))
         tracker.delete_expense(index)
         print("Expense deleted!")
+        tracker.save_to_file()
 
     elif choice == "5":
         print("Goodbye!")
         break
 
     
+    
 
+        
+
+        
+
+    
  
